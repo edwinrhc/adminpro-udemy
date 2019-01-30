@@ -23,7 +23,7 @@ export class UsuarioService {
   ) {
 
     this.cargarStorage();
-    console.log('Servicio de usuario Listo');
+
    }
 
    estaLogueado() {
@@ -162,10 +162,15 @@ export class UsuarioService {
 
       .pipe(map( (resp: any) => {
 
-        // tslint:disable-next-line:prefer-const
-        let usuarioDB: Usuario = resp.usuario;
 
-        this.guardarStorage( usuarioDB._id, this.token, usuarioDB);
+        if ( usuario._id === this.usuario._id) {
+
+
+          // tslint:disable-next-line:prefer-const
+          let usuarioDB: Usuario = resp.usuario;
+          this.guardarStorage( usuarioDB._id, this.token, usuarioDB);
+
+        }
 
         swal('Usuario actualizado', usuario.nombre, 'success');
 
@@ -193,7 +198,49 @@ export class UsuarioService {
 
   }
 
+  cargarUsuarios( desde: number = 0) {
+
+    // tslint:disable-next-line:prefer-const
+    let url = URL_SERVICIOS + '/usuario?desde=' + desde ;
+
+    return this.http.get(url);
+
+  }
 
 
+       // ============================
+  // tslint:disable-next-line:comment-format
+  //TODO: Buscar Usuario
+  // ============================
+
+  buscarUsuarios( termino: string ) {
+
+    // tslint:disable-next-line:prefer-const
+    let url = URL_SERVICIOS + '/busqueda/coleccion/usuarios/' + termino;
+
+    return this.http.get( url)
+            .pipe(map( (resp: any) => resp.usuarios ));
+
+
+  }
+
+   // ============================
+  // tslint:disable-next-line:comment-format
+  //TODO: Borrar Usuario
+  // ============================
+  borrarusuarios( id: string ) {
+
+    let url = URL_SERVICIOS + '/usuario/' + id;
+    url += '?token=' + this.token;
+
+    return this.http.delete(url)
+        .pipe(map( resp => {
+
+          swal('Usuario borraro', 'El usuario a sido elimiando correctamente', 'success');
+          return true;
+
+        }));
+
+  }
 
 }
