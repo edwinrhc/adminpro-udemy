@@ -11,8 +11,10 @@ import { throwError } from 'rxjs/internal/observable/throwError';
 
 
 import swal from 'sweetalert';
+
 import { Router } from '@angular/router';
 import { SubirArchivoService } from '../subir-archivo/subir-archivo.service';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -32,6 +34,36 @@ export class UsuarioService {
     this.cargarStorage();
 
    }
+
+  // ============================
+  // tslint:disable-next-line:comment-format
+  //TODO: RenuevaToken
+  // ============================
+
+   renuevaToken() {
+
+    let url = URL_SERVICIOS + '/login/renuevatoken';
+    url += '?token=' + this.token;
+
+    return this.http.get( url )
+        .pipe(map( (resp: any ) => {
+
+          this.token = resp.token;
+          localStorage.setItem('token', this.token);
+          console.log('Token renovado');
+          return true;
+
+        }),
+        catchError( err => {
+
+          this.router.navigate(['/login']);
+          swal('No se pudo renovar token', 'No fue posible renovar token', 'error');
+          return throwError( err);
+
+        }));
+
+  }
+
 
    estaLogueado() {
 
@@ -143,9 +175,6 @@ export class UsuarioService {
         );
 
   }
-
-
-
 
   // ============================
   //  Crear Usuario
@@ -276,5 +305,7 @@ export class UsuarioService {
         }));
 
   }
+
+
 
 }

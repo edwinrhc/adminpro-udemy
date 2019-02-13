@@ -1,6 +1,9 @@
+export { VerificaTokenGuard } from './guards/verifica-token.guard';
 //  Guards
 export { LoginGuardGuard } from './guards/login-guard.guard';
 export { AdminGuard } from './guards/admin.guard';
+
+
 
 //  Services
 // tslint:disable-next-line:eofline

@@ -26,7 +26,7 @@ export class ModalUploadComponent implements OnInit {
   ngOnInit() {
   }
 
- 
+
 
   cerrarModal() {
 
